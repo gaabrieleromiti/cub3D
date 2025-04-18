@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gromiti <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 12:52:43 by gromiti           #+#    #+#             */
-/*   Updated: 2024/01/11 14:36:43 by gromiti          ###   ########.fr       */
+/*   Updated: 2024/05/27 17:07:21 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,13 @@
 
 int	ft_atoi(const char *s)
 {
-	int	res;
-	int	sign;
+	long int	res;
+	int			sign;
 
 	res = 0;
 	sign = 1;
 	while ((*s == 32) || ((9 <= *s) && (*s <= 13)))
-	{
 		s++;
-	}
 	if (*s == 45 || *s == 43)
 	{
 		if (*s == 45)

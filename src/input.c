@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:34:48 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/17 17:19:39 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/18 15:53:03 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	check_extension(char *filename)
 ** file has a valid extension. If not, it prints an error message and returns 1.
 ** Otherwise, it returns 0.
 */
-int	check_args(int argc, char **argv, t_config *config)
+int	check_args(int argc, char **argv)
 {
 	if (argc != 2)
 	{
@@ -66,18 +66,10 @@ int	check_args(int argc, char **argv, t_config *config)
 ** If any of these steps fail, it prints an error message and returns 1.
 ** Otherwise, it returns 0.
 */
-int	init(int argc, char **argv)
+int	init(int argc, char **argv, t_config *config)
 {
-	t_config	*config;
-	
-	if (check_args(argc, argv, config))
+	if (check_args(argc, argv))
 		return (1);
-	config = malloc(sizeof(t_config));
-	if (!config)
-	{
-		printf("Error\nMemory allocation failed\n");
-		return (1);
-	}
 	config->filename = argv[1];
 	config->fd = open(config->filename, O_RDONLY);
 	if (config->fd < 0)
@@ -85,6 +77,7 @@ int	init(int argc, char **argv)
 		printf("Error\nFailed to open file: %s\n", config->filename);
 		return (1);
 	}
+	config->parsing_map = 0;
 	config->map = malloc(sizeof(t_map));
 	if (!config->map)
 	{

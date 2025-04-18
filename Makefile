@@ -6,7 +6,7 @@
 #    By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/17 12:38:11 by gromiti           #+#    #+#              #
-#    Updated: 2025/04/17 14:48:42 by gromiti          ###   ########.fr        #
+#    Updated: 2025/04/18 16:01:57 by gromiti          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,6 +53,6 @@ fclean: clean
 	$(MAKE) fclean -C ./libft
 	$(MAKE) fclean -C ./minilibx-linux
 
-re: fclean all
+re: clean all
 
 .PHONY: all clean fclean re .c.oC = gcc
