@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 12:36:26 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/21 16:07:43 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/21 16:43:28 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	main(int argc, char **argv)
 	if (init(argc, argv, config))
 	{
 		free(config);
+		// must free everything in config
 		return (1);
 	}
 	int	i = -1;
@@ -40,6 +41,7 @@ int	main(int argc, char **argv)
 		}
 		printf("\n");
 	}
+	printf("height: %zu\n", config->map->height);
 	// printf("%s\n", config->map->map[0]);
 	// while (++i < (int)config->map->width)
 	// 	printf("i: %d, c: %c\n", i, config->map->map[0][i]);

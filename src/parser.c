@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:33:45 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/21 16:14:58 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/21 16:41:59 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,22 @@
 int	is_map_line(char *line)
 {
 	int	i;
+	int	valid_char;
 
 	i = -1;
+	valid_char = 0;
 	while (line[++i])
 	{
-		//check if a newline after some spaces in a blank line still counts as a map line
 		if (line[i] != '1' && line[i] != '0' && \
 			line[i] != ' ' && line[i] != '\t' && \
 			line[i] != 'N' && line[i] != 'S' && line[i] != 'E' && line[i] != 'W')
 		{
-			if (line[i] == '\n')
+			if ((line[i] == '\n'|| line[i] == '\0') && valid_char == 1)
 				continue;
 			return (0);
 		}
+		else if (line[i] != ' ' && line[i] != '\t')
+			valid_char = 1;
 	}
 	return (1);
 }
@@ -226,9 +229,15 @@ int	parse(t_config *config)
 
 	while ((line = get_next_line(config->fd)) != NULL)
 	{
-		if (line[0] == '\n')
+		if (line[0] == '\n' || line[0] == '\0')
 		{
-			free (line);
+			if (config->parsing_map == 1)
+			{
+				printf("Error\nEmpty line in map\n");
+				free(line);
+				return (1);
+			}
+			free(line);
 			continue;
 		}
 		if (parse_line(config, line))
