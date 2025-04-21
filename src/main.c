@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 12:36:26 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/18 17:14:14 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/21 16:07:43 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	main(int argc, char **argv)
 		free(config);
 		return (1);
 	}
-
 	int	i = -1;
 	while (++i < (int)config->map->height)
 	{
@@ -36,7 +35,12 @@ int	main(int argc, char **argv)
 		{
 			// Print each character with a fixed width of 2
 			printf("%-2c", config->map->map[i][j]);
+			// if (j == 9)
+			// 	printf("%c", config->map->map[i][j]);
 		}
 		printf("\n");
 	}
+	// printf("%s\n", config->map->map[0]);
+	// while (++i < (int)config->map->width)
+	// 	printf("i: %d, c: %c\n", i, config->map->map[0][i]);
 }

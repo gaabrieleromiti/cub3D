@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:33:45 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/18 16:56:42 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/21 16:14:58 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	is_map_line(char *line)
 	i = -1;
 	while (line[++i])
 	{
+		//check if a newline after some spaces in a blank line still counts as a map line
 		if (line[i] != '1' && line[i] != '0' && \
 			line[i] != ' ' && line[i] != '\t' && \
 			line[i] != 'N' && line[i] != 'S' && line[i] != 'E' && line[i] != 'W')
@@ -39,6 +40,55 @@ int	is_map_line(char *line)
 		}
 	}
 	return (1);
+}
+
+/*
+** replace_tabs - Replace tabs with spaces in a line
+** @line: The line to replace tabs from.
+**
+** Return: A new line with tabs replaced by spaces.
+**
+** This function replaces each tab character in the line with a number of spaces
+** equal to the tab width. It allocates memory for the new line and returns it.
+** If memory allocation fails, it prints an error message and returns NULL.
+** The new line is null-terminated.
+*/
+char	*replace_tabs(char* line)
+{
+	int		i;
+	int		j;
+	int		k;
+	int		spaces;
+	char	*new_line;
+
+	i = -1;
+	spaces = 0;
+	while (line[++i])
+	{
+		if (line[i] == '\t')
+			spaces += TAB_WIDTH - 1;
+	}
+	new_line = (char *)malloc(sizeof(char) * (i + spaces + 1));
+	if (!new_line)
+	{
+		printf("Error\nMemory allocation failed\n");
+		return (NULL);
+	}
+	i = -1;
+	j = -1;
+	while (line[++i])
+	{
+		if (line[i] == '\t')
+		{
+			k = -1;
+			while (++k < TAB_WIDTH)
+				new_line[++j] = ' ';
+		}
+		else
+			new_line[++j] = line[i];
+	}
+	new_line[++j] = '\0';
+	return (new_line);
 }
 
 /*
@@ -73,7 +123,7 @@ int	parse_map_line(t_config *config, char *line)
 		printf("Error\nMemory allocation failed\n");
 		return (1);
 	}
-	config->map->map[config->map->height - 1] = ft_strdup(line);
+	config->map->map[config->map->height - 1] = replace_tabs(line);
 	if (!config->map->map[config->map->height - 1])
 	{
 		printf("Error\nMemory allocation failed\n");

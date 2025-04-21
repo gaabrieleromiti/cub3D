@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:35:48 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/18 15:58:45 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/21 15:11:48 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 
 // # include "../minilibx-linux/mlx.h"
 # include "../libft/libft.h"
+
+# define TAB_WIDTH 4
 
 typedef struct s_map
 {
