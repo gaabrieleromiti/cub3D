@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:33:45 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/22 19:50:54 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/23 00:02:42 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,17 @@ char	*replace_tabs(char* line)
 	return (new_line);
 }
 
+/*
+** realloc_map - Reallocate memory for the map
+** @map: The current map.
+** @new_size: The new size of the map.
+**
+** Return: A new map with the new size.
+**
+** This function reallocates memory for the map to add a new line. It copies
+** the old map to the new map and frees the old map. If memory allocation fails,
+** it prints an error message and returns NULL. The new map is null-terminated.
+*/
 char	**realloc_map(char **map, size_t new_size)
 {
 	char	**new_map;
