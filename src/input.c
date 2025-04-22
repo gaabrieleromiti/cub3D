@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:34:48 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/18 15:53:03 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/22 15:41:09 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int	init(int argc, char **argv, t_config *config)
 	}
 	config->parsing_map = 0;
 	config->map = malloc(sizeof(t_map));
+	config->map->width = 0;
 	if (!config->map)
 	{
 		printf("Error\nMemory allocation failed\n");

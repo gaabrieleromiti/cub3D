@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:33:45 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/21 16:41:59 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/22 19:50:54 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ char	*replace_tabs(char* line)
 		if (line[i] == '\t')
 			spaces += TAB_WIDTH - 1;
 	}
+
 	new_line = (char *)malloc(sizeof(char) * (i + spaces + 1));
 	if (!new_line)
 	{
@@ -92,6 +93,24 @@ char	*replace_tabs(char* line)
 	}
 	new_line[++j] = '\0';
 	return (new_line);
+}
+
+char	**realloc_map(char **map, size_t new_size)
+{
+	char	**new_map;
+	size_t	i;
+
+	i = -1;
+	new_map = (char **)malloc(sizeof(char *) * new_size);
+	if (!new_map)
+	{
+		printf("Error\nMemory allocation failed\n");
+		return (NULL);
+	}
+	while (++i < new_size - 1)
+		new_map[i] = map[i];
+	free(map);
+	return (new_map);
 }
 
 /*
@@ -120,7 +139,7 @@ int	parse_map_line(t_config *config, char *line)
 		config->parsing_map = 1;
 		config->map->height = 1;
 	}
-	config->map->map = ft_realloc(config->map->map, sizeof(char *) * (config->map->height));
+	config->map->map = realloc_map(config->map->map, config->map->height);
 	if (!config->map->map)
 	{
 		printf("Error\nMemory allocation failed\n");
@@ -132,9 +151,9 @@ int	parse_map_line(t_config *config, char *line)
 		printf("Error\nMemory allocation failed\n");
 		return (1);
 	}
+	if (config->map->width < ft_strlen(config->map->map[config->map->height - 1]))
+		config->map->width = ft_strlen(config->map->map[config->map->height - 1]);
 	config->map->height++;
-	if (config->map->width < ft_strlen(line))
-		config->map->width = ft_strlen(line);
 	return (0);
 }
 
@@ -248,6 +267,5 @@ int	parse(t_config *config)
 		free(line);
 	}
 	config->map->height--;
-	config->map->map[config->map->height] = NULL;
 	return (0);
 }
