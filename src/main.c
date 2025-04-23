@@ -6,11 +6,12 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 12:36:26 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/23 00:11:05 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/23 12:08:17 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3d.h"
+
 
 int	main(int argc, char **argv)
 {
@@ -24,32 +25,23 @@ int	main(int argc, char **argv)
 	}
 	if (init(argc, argv, config))
 	{
-		free(config);
-		// must free everything in config
+		free_config(config);
 		return (1);
 	}
-	int	i = -1;
-	while (++i < (int)config->map->height)
-	{
-		int	j = -1;
-		while (config->map->map[i][++j])
-			printf("%-2c", config->map->map[i][j]);
-		printf("\n");
-	}
-	printf("height: %zu\n", config->map->height);
 
-	i = -1; // QUALCUNO AVEVA DIMENTICATO DI AZZERARE I :')
-	while(++i < (int)config->map->height)
-		free(config->map->map[i]);
-	free(config->map->map);
-	free(config->map);
-	// free(config->textures->NO_texture);
-	// free(config->textures->SO_texture);
-	// free(config->textures->WE_texture);
-	// free(config->textures->EA_texture);
-	// free(config->textures->F_colour);
-	// free(config->textures->C_colour);
-	free(config->textures);
-	free(config);
+	mlx_key_hook(config->mlx->win, check_key, config);
+	mlx_hook(config->mlx->win, 17, 0, (void *)free_config, (void *)config);
+	mlx_loop(config->mlx->mlx);
+
+	// int	i = -1;
+	// while (++i < (int)config->map->height)
+	// {
+	// 	int	j = -1;
+	// 	while (config->map->map[i][++j])
+	// 		printf("%-2c", config->map->map[i][j]);
+	// 	printf("\n");
+	// }
+	// printf("height: %zu\n", config->map->height);
+
 	return (0);
 }

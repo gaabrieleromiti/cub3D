@@ -6,7 +6,7 @@
 #    By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/17 12:38:11 by gromiti           #+#    #+#              #
-#    Updated: 2025/04/18 16:01:57 by gromiti          ###   ########.fr        #
+#    Updated: 2025/04/23 11:38:31 by gromiti          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ LIBFT = libft.a
 
 MLX = libmlx_linux.a
 
-SRC = src/input.c src/main.c src/parser.c
+SRC = src/free.c src/init.c src/main.c src/parser.c src/window.c
 
 OBJS = $(SRC:%.c=%.o)
 

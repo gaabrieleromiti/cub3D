@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:35:48 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/22 19:50:23 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/23 11:58:57 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,17 @@
 # include <errno.h>
 # include <fcntl.h>
 
-// # include "../minilibx-linux/mlx.h"
+# include "../minilibx-linux/mlx.h"
 # include "../libft/libft.h"
 
 # define TAB_WIDTH 4
+# define KEY_ESC 65307
+# define KEY_W 119
+# define KEY_A 97
+# define KEY_S 115
+# define KEY_D 100
+# define KEY_LEFT 65361
+# define KEY_RIGHT 65363
 
 typedef struct s_map
 {
@@ -29,6 +36,19 @@ typedef struct s_map
 	size_t	width;
 	size_t	height;
 }	t_map;
+
+typedef struct s_mlx
+{
+	void	*mlx;
+	void	*win;
+}	t_mlx;
+
+typedef struct s_player
+{
+	int		x;
+	int		y;
+	char	dir;
+}	t_player;
 
 typedef struct t_textures
 {
@@ -49,23 +69,40 @@ typedef struct s_config
 	t_map		*map;
 	int			parsing_map;
 
+	t_player	*player;
+
+	t_mlx		*mlx;
+
 	t_textures	*textures;
 }	t_config;
 
-// input.c
+// free.c
+void	free_map(t_map *map);
+void	free_textures(t_textures *textures);
+void	free_mlx(t_mlx *mlx);
+void	free_config(t_config *config);
+
+// init.c
 int		check_extension(char *filename);
 int		check_args(int argc, char **arg);
+int		init_config(t_config *config, char *filename);
+int		init_map(t_config *config);
+int		init_textures(t_config *config);
+int		init_window(t_config *config);
+int		init_player(t_config *config);
 int		init(int argc, char **argv, t_config *config);
 
 // parser.c
 int		is_map_line(char *line);
 int		parse_line(t_config *config, char *line);
-char	*realloc_row(char *row, size_t new_size);
 char	*replace_tabs(char* line);
 char	**realloc_map(char **map, size_t new_size);
 int		parse_map_line(t_config *config, char *line);
 int		parse_texture_or_colour_line(t_config *config, char *line);
 int		parse(t_config *config);
+
+// window.c
+int		check_key(int keycode, t_config *config);
 
 
 
