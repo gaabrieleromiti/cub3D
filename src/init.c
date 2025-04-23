@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:34:48 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/23 12:00:40 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/24 01:16:40 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@
 int	check_extension(char *filename)
 {
 	if (ft_strncmp(filename + ft_strlen(filename) - 4, ".cub", 4) != 0)
-	{
-		printf("Error\nInvalid file extension. Expected .cub\n");
-		return (1);
-	}
+		free_config(NULL, "Error\nInvalid file extension. Expected .cub\n");
 	return (0);
 }
 /*
@@ -42,16 +39,11 @@ int	check_extension(char *filename)
 ** file has a valid extension. If not, it prints an error message and returns 1.
 ** Otherwise, it returns 0.
 */
-int	check_args(int argc, char **argv)
+void	check_args(int argc, char **argv)
 {
 	if (argc != 2)
-	{
-		printf("Error\nInvalid number of arguments\n");
-		return (1);
-	}
-	if (check_extension(argv[1]))
-		return (1);
-	return (0);
+		free_config(NULL, "Error\nInvalid number of arguments\n");
+	check_extension(argv[1]);
 }
 
 /*
@@ -66,21 +58,17 @@ int	check_args(int argc, char **argv)
 ** an error message and returns 1. Otherwise, it returns 0.
 ** The function also sets the parsing_map field to 0.
 */
-int	init_config(t_config *config, char *filename)
+void	init_config(t_config *config, char *filename)
 {
 	config->filename = filename;
 	config->fd = open(filename, O_RDONLY);
 	if (config->fd < 0)
-	{
-		printf("Error\nFailed to open file: %s\n", filename);
-		return (1);
-	}
+		free_config(config, "Error\nFailed to open file\n");
 	config->map = NULL;
 	config->textures = NULL;
 	config->mlx = NULL;
 	config->player = NULL;
 	config->parsing_map = 0;
-	return (0);
 }
 
 /*
@@ -93,18 +81,14 @@ int	init_config(t_config *config, char *filename)
 ** fields. If memory allocation fails, it prints an error message and returns 1.
 ** Otherwise, it returns 0.
 */
-int	init_map(t_config *config)
+void	init_map(t_config *config)
 {
 	config->map = malloc(sizeof(t_map));
+	if (!config->map)
+		free_config(config, "Error\nMemory allocation failed for map\n");
 	config->map->map = NULL;
 	config->map->height = 0;
 	config->map->width = 0;
-	if (!config->map)
-	{
-		printf("Error\nMemory allocation failed\n");
-		return (1);
-	}
-	return (0);
 }
 
 /*
@@ -117,35 +101,37 @@ int	init_map(t_config *config)
 ** its fields. If memory allocation fails, it prints an error message and
 ** returns 1. Otherwise, it returns 0.
 */
-int	init_textures(t_config *config)
+void	init_textures(t_config *config)
 {
 	config->textures = malloc(sizeof(t_textures));
 	if (!config->textures)
-	{
-		printf("Error\nMemory allocation failed for textures\n");
-		return (1);
-	}
+		free_config(config, "Error\nMemory allocation failed for textures\n");
 	config->textures->NO_texture = NULL;
 	config->textures->SO_texture = NULL;
 	config->textures->WE_texture = NULL;
 	config->textures->EA_texture = NULL;
 	config->textures->F_colour = NULL;
 	config->textures->C_colour = NULL;
-	return (0);
 }
 
-int	init_player(t_config *config)
+/*
+** init_player - Initialize the player structure
+** @config: The configuration structure to fill.
+**
+** Return: 0 if successful, 1 if an error occurred.
+**
+** This function allocates memory for the player structure and initializes
+** its fields. If memory allocation fails, it prints an error message and
+** returns 1. Otherwise, it returns 0.
+*/
+void	init_player(t_config *config)
 {
 	config->player = malloc(sizeof(t_player));
 	if (!config->player)
-	{
-		printf("Error\nMemory allocation failed for player\n");
-		return (1);
-	}
+		free_config(config, "Error\nMemory allocation failed for player\n");
 	config->player->x = 0;
 	config->player->y = 0;
 	config->player->dir = 0;
-	return (0);
 }
 
 /*
@@ -158,29 +144,19 @@ int	init_player(t_config *config)
 ** the specified dimensions and title. If any of these steps fail, it prints
 ** an error message and returns 1. Otherwise, it returns 0.
 */
-int init_window(t_config *config)
+void	init_window(t_config *config)
 {
 	config->mlx = malloc(sizeof(t_mlx));
 	if (!config->mlx)
-	{
-		printf("Error\nMemory allocation failed for mlx\n");
-		return (1);
-	}
+		free_config(config, "Error\nMemory allocation failed for mlx\n");
 	config->mlx->win = NULL;
 	config->mlx->mlx = NULL;
 	config->mlx->mlx = mlx_init();
 	if (!config->mlx->mlx)
-	{
-		printf("Error\nFailed to initialize mlx\n");
-		return (1);
-	}
+		free_config(config, "Error\nFailed to initialize mlx\n");
 	config->mlx->win = mlx_new_window(config->mlx->mlx, config->map->width * 32, config->map->height * 32, "Cub3D");
 	if (!config->mlx->win)
-	{
-		printf("Error\nFailed to create window\n");
-		return (1);
-	}
-	return (0);
+		free_config(config, "Error\nFailed to create window\n");
 }
 
 /*
@@ -195,20 +171,16 @@ int init_window(t_config *config)
 ** If any of these steps fail, it prints an error message and returns 1.
 ** Otherwise, it returns 0.
 */
-int	init(int argc, char **argv, t_config *config)
+void	init(int argc, char **argv, t_config *config)
 {
-	if (check_args(argc, argv))
-		return (1);
-	if (init_config(config, argv[1]))
-		return (1);
-	if (init_map(config))
-		return (1);
-	if (init_textures(config))
-		return (1);
-	if (parse(config))
-		return (1);
-	if (init_window(config))
-		return (1);
+	check_args(argc, argv);
+	init_config(config, argv[1]);
+	init_map(config);
+	init_player(config);
+	init_textures(config);
+	parse(config);
+	set_start_pos(config);
+	check_wall(config);
+	init_window(config);
 	close(config->fd);
-	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:33:45 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/23 00:02:42 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/24 01:05:12 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	is_map_line(char *line)
 ** If memory allocation fails, it prints an error message and returns NULL.
 ** The new line is null-terminated.
 */
-char	*replace_tabs(char* line)
+char	*replace_tabs(char *line)
 {
 	int		i;
 	int		j;
@@ -71,13 +71,9 @@ char	*replace_tabs(char* line)
 		if (line[i] == '\t')
 			spaces += TAB_WIDTH - 1;
 	}
-
-	new_line = (char *)malloc(sizeof(char) * (i + spaces + 1));
+	new_line = (char *)malloc(sizeof(char) * (i + spaces));
 	if (!new_line)
-	{
-		printf("Error\nMemory allocation failed\n");
 		return (NULL);
-	}
 	i = -1;
 	j = -1;
 	while (line[++i])
@@ -87,6 +83,11 @@ char	*replace_tabs(char* line)
 			k = -1;
 			while (++k < TAB_WIDTH)
 				new_line[++j] = ' ';
+		}
+		else if (line[i] == '\n')
+		{
+			new_line[++j] = '\0';
+			return (new_line);
 		}
 		else
 			new_line[++j] = line[i];
@@ -114,10 +115,7 @@ char	**realloc_map(char **map, size_t new_size)
 	i = -1;
 	new_map = (char **)malloc(sizeof(char *) * new_size);
 	if (!new_map)
-	{
-		printf("Error\nMemory allocation failed\n");
 		return (NULL);
-	}
 	while (++i < new_size - 1)
 		new_map[i] = map[i];
 	free(map);
@@ -137,15 +135,15 @@ char	**realloc_map(char **map, size_t new_size)
 ** height and width of the map. If any of these steps fail, it prints an error
 ** message and returns 1. Otherwise, it returns 0.
 */
-int	parse_map_line(t_config *config, char *line)
+void	parse_map_line(t_config *config, char *line)
 {
 	if (!config->parsing_map)
 	{
 		config->map->map = (char **)malloc(sizeof(char *) * 1);
 		if (!config->map->map)
 		{
-			printf("Error\nMemory allocation failed\n");
-			return (1);
+			free(line);
+			free_config(config, "Error\nMemory allocation failed for map\n");
 		}
 		config->parsing_map = 1;
 		config->map->height = 1;
@@ -153,19 +151,18 @@ int	parse_map_line(t_config *config, char *line)
 	config->map->map = realloc_map(config->map->map, config->map->height);
 	if (!config->map->map)
 	{
-		printf("Error\nMemory allocation failed\n");
-		return (1);
+		free(line);
+		free_config(config, "Error\nMemory allocation failed for new_map\n");
 	}
 	config->map->map[config->map->height - 1] = replace_tabs(line);
 	if (!config->map->map[config->map->height - 1])
 	{
-		printf("Error\nMemory allocation failed\n");
-		return (1);
+		free(line);
+		free_config(config, "Error\nMemory allocation failed for new_line\n");
 	}
 	if (config->map->width < ft_strlen(config->map->map[config->map->height - 1]))
 		config->map->width = ft_strlen(config->map->map[config->map->height - 1]);
 	config->map->height++;
-	return (0);
 }
 
 /*
@@ -180,7 +177,7 @@ int	parse_map_line(t_config *config, char *line)
 ** configuration structure. If any of these steps fail, it prints an error
 ** message and returns 1. Otherwise, it returns 0.
 */
-int	parse_texture_or_colour_line(t_config *config, char *line)
+void	parse_texture_or_colour_line(t_config *config, char *line)
 {
 	if (ft_strncmp(line, "NO", 2) == 0)
 		config->textures->NO_texture = ft_strdup(line + 3);
@@ -195,15 +192,17 @@ int	parse_texture_or_colour_line(t_config *config, char *line)
 	else if (ft_strncmp(line, "C", 1) == 0)
 		config->textures->C_colour = ft_strdup(line + 2);
 	else
-		return (1);
+	{
+		free(line);
+		free_config(config, "Error\nInvalid texture or colour line\n");
+	}
 	if (!config->textures->NO_texture || !config->textures->SO_texture || \
 		!config->textures->WE_texture || !config->textures->EA_texture || \
 		!config->textures->F_colour || !config->textures->C_colour)
-	{
-		printf("Error\nMemory allocation failed for textures or colours\n");
-		return (1);
-	}
-	return (0);
+		{
+			free(line);
+			free_config(config, "Error\nMemory allocation failed for textures or colours\n");
+		}
 }
 
 
@@ -220,26 +219,17 @@ int	parse_texture_or_colour_line(t_config *config, char *line)
 ** these steps fail, it prints an error message and returns 1. Otherwise,
 ** it returns 0.
 */
-int	parse_line(t_config *config, char *line)
+void	parse_line(t_config *config, char *line)
 {
 	if (is_map_line(line))
-	{
 		parse_map_line(config, line);
-	}
 	else if (!config->parsing_map)
-	{
-		if (parse_texture_or_colour_line(config, line))
-		{
-			printf("Error\nInvalid texture or colour line: %s\n", line);
-			return (1);
-		}
-	}
+		parse_texture_or_colour_line(config, line);
 	else
 	{
-		printf("Error\nNon-map line after map started: %s\n", line);
-		return (1);
+		free(line);
+		free_config(config, "Error\nInvalid line after map started\n");
 	}
-	return (0);
 }
 
 /*
@@ -253,7 +243,7 @@ int	parse_line(t_config *config, char *line)
 ** appropriate parsing function. If any line is invalid, it prints an error
 ** message and returns 1. Otherwise, it returns 0.
 */
-int	parse(t_config *config)
+void	parse(t_config *config)
 {
 	char	*line;
 
@@ -263,20 +253,14 @@ int	parse(t_config *config)
 		{
 			if (config->parsing_map == 1)
 			{
-				printf("Error\nEmpty line in map\n");
 				free(line);
-				return (1);
+				free_config(config, "Error\nEmpty line in map\n");
 			}
 			free(line);
 			continue;
 		}
-		if (parse_line(config, line))
-		{
-			free(line);
-			return (1);
-		}
+		parse_line(config, line);
 		free(line);
 	}
 	config->map->height--;
-	return (0);
 }

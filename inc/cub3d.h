@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:35:48 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/23 11:58:57 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/24 01:15:29 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,28 +80,30 @@ typedef struct s_config
 void	free_map(t_map *map);
 void	free_textures(t_textures *textures);
 void	free_mlx(t_mlx *mlx);
-void	free_config(t_config *config);
+void	free_config(t_config *config, char *error);
 
 // init.c
 int		check_extension(char *filename);
-int		check_args(int argc, char **arg);
-int		init_config(t_config *config, char *filename);
-int		init_map(t_config *config);
-int		init_textures(t_config *config);
-int		init_window(t_config *config);
-int		init_player(t_config *config);
-int		init(int argc, char **argv, t_config *config);
+void	check_args(int argc, char **arg);
+void	init_config(t_config *config, char *filename);
+void	init_map(t_config *config);
+void	init_textures(t_config *config);
+void	init_window(t_config *config);
+void	init_player(t_config *config);
+void	init(int argc, char **argv, t_config *config);
 
 // parser.c
 int		is_map_line(char *line);
-int		parse_line(t_config *config, char *line);
 char	*replace_tabs(char* line);
 char	**realloc_map(char **map, size_t new_size);
-int		parse_map_line(t_config *config, char *line);
-int		parse_texture_or_colour_line(t_config *config, char *line);
-int		parse(t_config *config);
+void	parse_map_line(t_config *config, char *line);
+void	parse_texture_or_colour_line(t_config *config, char *line);
+void	parse_line(t_config *config, char *line);
+void	parse(t_config *config);
 
 // window.c
+void	set_start_pos(t_config *config);
+void	check_wall(t_config *config);
 int		check_key(int keycode, t_config *config);
 
 

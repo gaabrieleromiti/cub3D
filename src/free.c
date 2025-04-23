@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:37:18 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/23 12:08:40 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/24 00:54:34 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,10 @@ void	free_mlx(t_mlx *mlx)
 	free(mlx);
 }
 
-void	free_config(t_config *config)
+void	free_config(t_config *config, char *error)
 {
+	if (config->fd >= 0)
+		close(config->fd);
 	if (config->map)
 		free_map(config->map);
 	if (config->textures)
@@ -60,5 +62,6 @@ void	free_config(t_config *config)
 		free_mlx(config->mlx);
 	free(config->player);
 	free(config);
+	ft_putstr_fd(error, 2);
 	exit(1);
 }

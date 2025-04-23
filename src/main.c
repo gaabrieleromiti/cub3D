@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 12:36:26 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/23 12:08:17 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/24 01:16:25 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,19 @@ int	main(int argc, char **argv)
 	config = (t_config *)malloc(sizeof(t_config));
 	if (!config)
 	{
-		printf("Error\nMemory allocation failed\n");
-		return (1);
+		ft_putstr_fd("Error\nMemory allocation failed for config\n", 2);
+		exit(1);
 	}
-	if (init(argc, argv, config))
-	{
-		free_config(config);
-		return (1);
-	}
+	init(argc, argv, config);
 
-	mlx_key_hook(config->mlx->win, check_key, config);
-	mlx_hook(config->mlx->win, 17, 0, (void *)free_config, (void *)config);
-	mlx_loop(config->mlx->mlx);
+	printf("x: %d\ny: %d\ndir: %c", config->player->x, config->player->y,config->player->dir);
+	// exit(1);
+
+	free_config(config, NULL);
+
+	// mlx_key_hook(config->mlx->win, check_key, config);
+	// mlx_hook(config->mlx->win, 17, 0, (void *)free_config, (void *)config);
+	// mlx_loop(config->mlx->mlx);
 
 	// int	i = -1;
 	// while (++i < (int)config->map->height)
