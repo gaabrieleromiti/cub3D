@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 12:36:26 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/24 01:16:25 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/24 12:44:13 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,9 @@ int	main(int argc, char **argv)
 	}
 	init(argc, argv, config);
 
-	printf("x: %d\ny: %d\ndir: %c", config->player->x, config->player->y,config->player->dir);
+	printf("x: %d\ny: %d\ndir: %c\n", config->player->x, config->player->y,config->player->dir);
 	// exit(1);
+
 
 	free_config(config, NULL);
 

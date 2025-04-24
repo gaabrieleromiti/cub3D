@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 10:53:44 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/24 01:20:36 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/24 12:40:00 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	check_wall(t_config *config)
 			{
 				if (r == 0 || r == (int)config->map->height - 1)
 					free_config(config, "Error\nMap is not closed\n");
-				if (c == 0 || c == (int)ft_strlen(config->map->map[r] - 1))
+				if (c == 0 || c == (int)ft_strlen(config->map->map[r]) - 1)
 					free_config(config, "Error\nMap is not closed\n");
 				if (config->map->map[r][c - 1] == ' ' || config->map->map[r][c + 1] == ' ' ||
 					config->map->map[r - 1][c] == ' ' || config->map->map[r + 1][c] == ' ')
