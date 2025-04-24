@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 12:36:26 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/24 12:44:13 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/24 16:58:31 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,11 @@ int	main(int argc, char **argv)
 	// exit(1);
 
 
-	free_config(config, NULL);
+	setup_hooks(config);
+
+	// free_config(config, NULL);
 
 	// mlx_key_hook(config->mlx->win, check_key, config);
-	// mlx_hook(config->mlx->win, 17, 0, (void *)free_config, (void *)config);
 	// mlx_loop(config->mlx->mlx);
 
 	// int	i = -1;

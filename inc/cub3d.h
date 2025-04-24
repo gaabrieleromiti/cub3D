@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:35:48 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/24 01:15:29 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/24 17:51:11 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include "../libft/libft.h"
 
 # define TAB_WIDTH 4
+
+// KEY CODES
 # define KEY_ESC 65307
 # define KEY_W 119
 # define KEY_A 97
@@ -28,6 +30,14 @@
 # define KEY_D 100
 # define KEY_LEFT 65361
 # define KEY_RIGHT 65363
+
+// 2D MAP
+# define TILE_SIZE 32
+# define FLOOR_COLOUR 0x00FF00 // Green
+# define WALL_COLOUR 0x444444 // Grey
+# define PLAYER_COLOUR 0xFF0000 // Red
+# define EMPTY_SPACE_COLOUR 0x000000 // Black
+# define PLAYER_SIZE 8
 
 typedef struct s_map
 {
@@ -37,10 +47,19 @@ typedef struct s_map
 	size_t	height;
 }	t_map;
 
+typedef struct s_img
+{
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}	t_img;
 typedef struct s_mlx
 {
 	void	*mlx;
 	void	*win;
+	t_img	img;
 }	t_mlx;
 
 typedef struct s_player
@@ -75,6 +94,8 @@ typedef struct s_config
 
 	t_textures	*textures;
 }	t_config;
+
+// 2d.c
 
 // free.c
 void	free_map(t_map *map);

@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:33:45 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/24 01:05:12 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/24 12:48:21 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,6 @@ void	parse_texture_or_colour_line(t_config *config, char *line)
 			free_config(config, "Error\nMemory allocation failed for textures or colours\n");
 		}
 }
-
 
 /*
 ** parse_line - Parse a line

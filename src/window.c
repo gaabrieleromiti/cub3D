@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 10:53:44 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/24 12:40:00 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/24 12:47:52 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,15 @@ void	set_start_pos(t_config *config)
 		free_config(config, "Error\nNo starting position found\n");
 }
 
+/*
+** check_wall - Check if the map is closed
+** @config: The configuration structure to check.
+**
+** This function iterates through the map and checks if there are any empty
+** spaces ('0') at the edges or if there are any empty spaces (' ') adjacent to
+** empty spaces. If any of these conditions are met, it prints an error
+** message and frees the configuration structure.
+*/
 void	check_wall(t_config *config)
 {
 	int	r;
@@ -76,6 +85,18 @@ void	check_wall(t_config *config)
 	}
 }
 
+/*
+** check_key - Check the key pressed and update the player's position
+** @keycode: The keycode of the key pressed.
+** @config: The configuration structure to update.
+**
+** This function checks the keycode of the key pressed and updates the
+** player's position and direction accordingly. If the ESC key is pressed,
+** it frees the configuration structure and exits the program. The W, A, S,
+** D keys move the player in the respective directions, and the left and
+** right arrow keys rotate the player left and right.
+** The function returns 1 to indicate that the key was handled.
+*/
 int	check_key(int keycode, t_config *config)
 {
 	if (keycode == KEY_ESC)
