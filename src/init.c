@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:34:48 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/24 01:16:40 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/28 10:17:27 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,11 +131,11 @@ void	init_player(t_config *config)
 		free_config(config, "Error\nMemory allocation failed for player\n");
 	config->player->x = 0;
 	config->player->y = 0;
-	config->player->dir = 0;
+	config->player->spawn_direction = 0;
 }
 
 /*
-** init_window - Initialize the window using mlx
+** init_mlx - Initialize the mlx structure
 ** @mlx: The mlx structure to fill.
 **
 ** Return: 0 if successful, 1 if an error occurred.
@@ -144,19 +144,28 @@ void	init_player(t_config *config)
 ** the specified dimensions and title. If any of these steps fail, it prints
 ** an error message and returns 1. Otherwise, it returns 0.
 */
-void	init_window(t_config *config)
+void	init_mlx(t_config *config)
 {
+	if (!config)
+		return;
 	config->mlx = malloc(sizeof(t_mlx));
 	if (!config->mlx)
-		free_config(config, "Error\nMemory allocation failed for mlx\n");
-	config->mlx->win = NULL;
-	config->mlx->mlx = NULL;
+		free_config(config, "Failed to allocate memory for MLX");
 	config->mlx->mlx = mlx_init();
 	if (!config->mlx->mlx)
-		free_config(config, "Error\nFailed to initialize mlx\n");
-	config->mlx->win = mlx_new_window(config->mlx->mlx, config->map->width * 32, config->map->height * 32, "Cub3D");
+		free_config(config, "Failed to initialize MLX");
+	config->mlx->win = mlx_new_window(config->mlx->mlx, WIN_WIDTH, WIN_HEIGHT, WIN_TITLE);
 	if (!config->mlx->win)
-		free_config(config, "Error\nFailed to create window\n");
+		free_config(config, "Failed to create window");
+	config->mlx->img = malloc(sizeof(t_img));
+	if (!config->mlx->img)
+		free_config(config, "Failed to allocate memory for image");
+	config->mlx->img->img = mlx_new_image(config->mlx->mlx, WIN_WIDTH, WIN_HEIGHT);
+	if (!config->mlx->img->img)
+		free_config(config, "Failed to create image");
+	config->mlx->img->addr = mlx_get_data_addr(config->mlx->img->img, &(config->mlx->img->bits_per_pixel), &(config->mlx->img->line_length), &(config->mlx->img->endian));
+	if (!config->mlx->img->addr)
+		free_config(config, "Failed to get image address");
 }
 
 /*
@@ -181,6 +190,6 @@ void	init(int argc, char **argv, t_config *config)
 	parse(config);
 	set_start_pos(config);
 	check_wall(config);
-	init_window(config);
+	init_mlx(config);
 	close(config->fd);
 }

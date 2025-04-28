@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:35:48 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/24 17:51:11 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/28 12:55:12 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@
 # define EMPTY_SPACE_COLOUR 0x000000 // Black
 # define PLAYER_SIZE 8
 
+// WINDOW
+# define WIN_WIDTH 1024
+# define WIN_HEIGHT 768
+# define WIN_TITLE "cub3D"
+
 typedef struct s_map
 {
 	char	**map;
@@ -55,18 +60,21 @@ typedef struct s_img
 	int		line_length;
 	int		endian;
 }	t_img;
+
 typedef struct s_mlx
 {
 	void	*mlx;
 	void	*win;
-	t_img	img;
+	t_img	*img;
+	int		tile_size;
 }	t_mlx;
 
 typedef struct s_player
 {
 	int		x;
 	int		y;
-	char	dir;
+	float	rotation_angle;
+	char	spawn_direction;
 }	t_player;
 
 typedef struct t_textures
@@ -96,6 +104,13 @@ typedef struct s_config
 }	t_config;
 
 // 2d.c
+void	get_tile_size(t_config *config);
+void	my_pixel_put(t_config *config, int x, int y, int colour);
+void	draw_tile(t_config *config, int x, int y, int colour);
+void	draw_player(t_config *config);
+void	draw_map(t_config *config);
+int		move(int keycode, t_config *config);
+void	render_2d(t_config *config);
 
 // free.c
 void	free_map(t_map *map);
@@ -109,7 +124,7 @@ void	check_args(int argc, char **arg);
 void	init_config(t_config *config, char *filename);
 void	init_map(t_config *config);
 void	init_textures(t_config *config);
-void	init_window(t_config *config);
+void	init_mlx(t_config *config);
 void	init_player(t_config *config);
 void	init(int argc, char **argv, t_config *config);
 
@@ -125,6 +140,7 @@ void	parse(t_config *config);
 // window.c
 void	set_start_pos(t_config *config);
 void	check_wall(t_config *config);
+void	update_player_pos(t_config *config, int inc_x, int inc_y);
 int		check_key(int keycode, t_config *config);
 
 

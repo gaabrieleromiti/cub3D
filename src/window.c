@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 10:53:44 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/24 12:47:52 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/28 12:54:34 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	set_start_pos(t_config *config)
 			{
 				config->player->x = j;
 				config->player->y = i;
-				config->player->dir = c;
+				config->player->spawn_direction = c;
 				if (++start > 1)
 					free_config(config, "Error\nMultiple starting positions found\n");
 			}
@@ -85,6 +85,20 @@ void	check_wall(t_config *config)
 	}
 }
 
+void	update_player_pos(t_config *config, int inc_x, int inc_y)
+{
+	int		x;
+	int		y;
+
+	x = config->player->x;
+	y = config->player->y;
+	if (config->map->map[y + inc_y][x + inc_x] != '1')
+	{
+		config->player->x += inc_x;
+		config->player->y += inc_y;
+	}
+}
+
 /*
 ** check_key - Check the key pressed and update the player's position
 ** @keycode: The keycode of the key pressed.
@@ -102,16 +116,16 @@ int	check_key(int keycode, t_config *config)
 	if (keycode == KEY_ESC)
 		free_config(config, NULL);
 	if (keycode == KEY_W)
-		config->player->x += 1;
+		update_player_pos(config, 0, -1);
 	else if (keycode == KEY_A)
-		config->player->y -= 1;
+		update_player_pos(config, -1, 0);
 	else if (keycode == KEY_S)
-		config->player->x -= 1;
+		update_player_pos(config, 0, 1);
 	else if (keycode == KEY_D)
-		config->player->y += 1;
+		update_player_pos(config, 1, 0);
 	else if (keycode == KEY_LEFT)
-		config->player->dir -= 1;
+		config->player->rotation_angle -= 1;
 	else if (keycode == KEY_RIGHT)
-		config->player->dir += 1;
+		config->player->rotation_angle += 1;
 	return (1);
 }

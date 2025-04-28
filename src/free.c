@@ -6,7 +6,7 @@
 /*   By: gromiti <gromiti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:37:18 by gromiti           #+#    #+#             */
-/*   Updated: 2025/04/24 00:54:34 by gromiti          ###   ########.fr       */
+/*   Updated: 2025/04/28 11:09:31 by gromiti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,12 @@ void	free_textures(t_textures *textures)
 
 void	free_mlx(t_mlx *mlx)
 {
+	if (mlx->img)
+	{
+		if (mlx->img->img)
+			mlx_destroy_image(mlx->mlx, mlx->img->img);
+		free(mlx->img);
+	}
 	if (mlx->win)
 		mlx_destroy_window(mlx->mlx, mlx->win);
 	if (mlx->mlx)
